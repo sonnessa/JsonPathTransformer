@@ -37,8 +37,8 @@ allprojects {
     ext.displayName = null
     ext.buildTimestamp = new Date().format('yyyy-MM-dd HH:mm:ss')
 
-    group = 'com.jayway.jsonpath'
-    version = '2.4.0' + (snapshotVersion ? "-SNAPSHOT" : "")
+    group = 'com.jayway.jsonpath.transform'
+    version = '2.4.0'
 
     if (JavaVersion.current().isJava8Compatible()) {
         tasks.withType(Javadoc) {

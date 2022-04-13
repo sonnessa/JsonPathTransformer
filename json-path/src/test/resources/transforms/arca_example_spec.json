@@ -1,0 +1,93 @@
+{
+  "lookupTables": [{
+      "tableName": "booleanMapper",
+      "tableData": {
+          "true": "Si",
+          "false": "No"
+      }
+  }],
+  "pathMappings": [{
+    "source": "$.Id_Cliente",
+    "target": "$.references[0].id"
+  },
+    {
+      "additionalTransform" : {
+        "constantSourceValue": "arca"
+      },
+      "target": "$.references[0].ref"
+    },
+    {
+      "source": "$.Cognome",
+      "target": "$.data.lastname"
+    },
+    {
+      "source": "$.Nome",
+      "target": "$.data.firstname"
+    },
+    {
+      "source": "$.Telefono",
+      "target": "$.data.phone"
+    },
+    {
+      "source": "$.Cellulare",
+      "target": "$.data.mobilephone"
+    },
+    {
+      "source": "$.Codice_Fiscale",
+      "target": "$.data.fiscalcode"
+    },
+    {
+      "source": "$.Data_Nascita",
+      "target": "$.data.date_of_birth"
+    },
+    {
+      "source": "$.Sesso",
+      "target": "$.data.gender"
+    },
+    {
+      "source": "$.Codice_Medico",
+      "target": "$.additional_data.codice_medico"
+    },
+    {
+      "source": "$.Indirizzo",
+      "target": "$.shipping_address.line1"
+    },
+    {
+      "source": "$.Comune",
+      "target": "$.shipping_address.city"
+    },
+    {
+      "source": "$.CAP",
+      "target": "$.shipping_address.zip_code"
+    },
+    {
+      "source": "$.Provincia",
+      "target": "$.shipping_address.region"
+    },
+    {
+      "source": "$.Nazione",
+      "target": "$.shipping_address.country_code"
+    },
+    {
+      "source": "$.EMail",
+      "target": "$.data.email"
+    },
+    {
+      "additionalTransform" : {
+        "constantSourceValue": true
+      },
+      "target": "$.data.verified_email"
+    },
+    {
+      "source": "$.Note",
+      "target": "$.shipping_address.notes"
+    }, {
+        "source": "$.Cliente",
+        "additionalTransform" : {
+            "operator" : "BOOL_TO_STRING"
+        },
+        "target": "$.data.is_cliente",
+        "lookupTable": "booleanMapper"
+      }
+    ]
+}

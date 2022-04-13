@@ -160,6 +160,8 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                     List<PathMapping> expanded = computedExpandedPathForArrays(
                             source, srcPath, pm.getTarget(), configuration);
                     for (PathMapping exp : expanded) {
+                        exp.setAdditionalTransform(pm.getAdditionalTransform());
+                        exp.setLookupTable(pm.getLookupTable());
                         if (first) {
                             transformed = transform(
                                     exp, first, inputObject, configuration, jsonContext, transformed, model
@@ -289,9 +291,6 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                         getStringFromBundle(SOURCE_NOT_SCALAR, srcPath, srcValue.getClass().getName()));
             }
         }
-        if (lookupTable != null && (srcValue instanceof String)) {
-            srcValue = lookup(srcValue, lookupTable, model.getLookupTables());
-        }
 
         //process any additional source transforms
         Object additonalSourceValue = null;
@@ -326,6 +325,10 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
             if (operator != null) {
                 srcValue = applyAddtionalTransform(srcValue, additonalSourceValue, operatorEnum);
             }
+        }
+
+        if (lookupTable != null && (srcValue instanceof String)) {
+            srcValue = lookup(srcValue, lookupTable, model.getLookupTables());
         }
 
         if (first) {
@@ -493,6 +496,7 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     private BiFunction<Boolean, Boolean, Boolean> xor = (a, b) -> a ^ b;
     private Function<String, Long> toEpochMillis = (a) -> iso8601ToEpochMillis(a);
     private Function<Long, String> toIso8601 = (a) -> epochMillisToIso8601(a);
+    private Function<Boolean, String> boolToString = (b) -> b ? "true" : "false";
 
     private static String getInferredType(Number a, Number b) {
         String ab = (a.getClass().getName().substring(10, 11).toUpperCase())
@@ -621,6 +625,8 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                 return toIso8601.apply((Long) srcValue);
             case TO_EPOCHMILLIS:
                 return toEpochMillis.apply((String) srcValue);
+            case BOOL_TO_STRING:
+                return boolToString.apply ((Boolean) srcValue);
 
             default:
                 throw new TransformationException(
