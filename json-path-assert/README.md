@@ -9,7 +9,7 @@ This library is available at the Central Maven Repository. Maven users add this 
 
 ```xml
 <dependency>
-    <groupId>com.jayway.jsonpath</groupId>
+    <groupId>com.jayway.jsontransformercom.jayway.jsontransformer</groupId>
     <artifactId>json-path-assert</artifactId>
     <version>2.2.0</version>
 </dependency>
@@ -19,7 +19,7 @@ This library is available at the Central Maven Repository. Maven users add this 
 
 Statically import the library entry point:
 
-    import static com.jayway.jsonpath.matchers.JsonPathMatchers.*;
+    import static com.jayway.jsontransformer.matchers.JsonPathMatchers.*;
 
 NOTE: The actual evaluation of JsonPath will depend on the current configuration:
 

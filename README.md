@@ -4,8 +4,8 @@ Jayway JsonPath
 **A Java DSL for reading JSON documents.**
 
 [![Build Status](https://travis-ci.org/json-path/JsonPath.svg?branch=master)](https://travis-ci.org/json-path/JsonPath)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jayway.jsonpath/json-path/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jayway.jsonpath/json-path)
-[![Javadoc](https://www.javadoc.io/badge/com.jayway.jsonpath/json-path.svg)](http://www.javadoc.io/doc/com.jayway.jsonpath/json-path)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/jsontransformer/json-path/badge.svg)](https://maven-badges.herokuapp.com/maven-central/jsontransformer/json-path)
+[![Javadoc](https://www.javadoc.io/badge/jsontransformer/json-path.svg)](http://www.javadoc.io/doc/jsontransformer/json-path)
 
 Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http://goessner.net/articles/JsonPath/). 
 
@@ -37,7 +37,7 @@ JsonPath is available at the Central Maven Repository. Maven users add this to y
 
 ```xml
 <dependency>
-    <groupId>com.jayway.jsonpath</groupId>
+    <groupId>com.jayway.jsontransformercom.jayway.jsontransformer</groupId>
     <artifactId>json-path</artifactId>
     <version>2.5.0</version>
 </dependency>
@@ -281,9 +281,9 @@ You can use `!` to negate a predicate `[?(!(@.price < 10 && @.category == 'ficti
 Predicates can be built using the Filter API as shown below:
 
 ```java
-import static com.jayway.jsonpath.JsonPath.parse;
-import static com.jayway.jsonpath.Criteria.where;
-import static com.jayway.jsonpath.Filter.filter;
+import static com.jayway.jsontransformer.JsonPath.parse;
+import static com.jayway.jsontransformer.Criteria.where;
+import static com.jayway.jsontransformer.Filter.filter;
 ...
 ...
 
@@ -470,8 +470,8 @@ Note that the JacksonJsonProvider requires `com.fasterxml.jackson.core:jackson-d
 
 In JsonPath 2.1.0 a new Cache SPI was introduced. This allows API consumers to configure path caching in a way that suits their needs. The cache must be configured before it is accesses for the first time or a JsonPathException is thrown. JsonPath ships with two cache implementations
 
-* `com.jayway.jsonpath.spi.cache.LRUCache` (default, thread safe)
-* `com.jayway.jsonpath.spi.cache.NOOPCache` (no cache)
+* `com.jayway.jsontransformer.spi.cache.LRUCache` (default, thread safe)
+* `com.jayway.jsontransformer.spi.cache.NOOPCache` (no cache)
 
 If you want to implement your own cache the API is simple. 
 
@@ -510,11 +510,11 @@ JsonPath set/put API can be used to update the value in a document at a given Pa
 Here path '$.a.b.c' does not exist in the input Object so we would get a PathNotFoundException
 
 ```java
-com.jayway.jsonpath.PathNotFoundException: Missing property in path $['a']
-	at com.jayway.jsonpath.internal.path.EvaluationContextImpl.getValue(EvaluationContextImpl.java:133)
-	at com.jayway.jsonpath.JsonPath.read(JsonPath.java:199)
-	at com.jayway.jsonpath.internal.JsonContext.read(JsonContext.java:89)
-	at com.jayway.jsonpath.internal.JsonContext.read(JsonContext.java:78)
+com.jayway.jsontransformer.PathNotFoundException: Missing property in path $['a']
+	at com.jayway.jsontransformer.internal.path.EvaluationContextImpl.getValue(EvaluationContextImpl.java:133)
+	at com.jayway.jsontransformer.JsonPath.read(JsonPath.java:199)
+	at com.jayway.jsontransformer.internal.JsonContext.read(JsonContext.java:89)
+	at com.jayway.jsontransformer.internal.JsonContext.read(JsonContext.java:78)
 ```
 
 There are usecases where one would like the above set API to create a JSON of the form below:
@@ -813,9 +813,9 @@ For more details refer [[testcase](https://github.com/KumarJayanti/JsonPath/blob
 ##### Supported Set of Operators for Transformations and Extending the supported Operators
 A limited set of Binary and Unary operators are currently supported by the Transformation Spec and Provider.
 However extending the set of operators is simple enough. 
-* A new operator (binary/unary) can be added to com.jayway.jsonpath.spi.transformer.jsonpathtransformer.model.SourceTransform.AllowedOperation
-* Validation Rules for the source and destination operands as applicable would have to implemented in com.jayway.jsonpath.spi.transformer.jsonpathtransformer.JsonPathTransformationSpec.validate
-* The actual operation when the operator is used in the transform spec should be implemented as a new case in com.jayway.jsonpath.spi.transformer.jsonpathtransformer.JsonPathTransformationProvider.applyAddtionalTransform
+* A new operator (binary/unary) can be added to com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.model.SourceTransform.AllowedOperation
+* Validation Rules for the source and destination operands as applicable would have to implemented in com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.JsonPathTransformationSpec.validate
+* The actual operation when the operator is used in the transform spec should be implemented as a new case in com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.JsonPathTransformationProvider.applyAddtionalTransform
 
 The support for adding additional operators can be enhanced to a more sophisticated declarative approach. But its best to wait 
 and see sufficient interest in this project to justify the additional efforts.

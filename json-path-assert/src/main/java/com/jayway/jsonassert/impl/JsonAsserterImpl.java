@@ -2,9 +2,9 @@ package com.jayway.jsonassert.impl;
 
 
 import com.jayway.jsonassert.JsonAsserter;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
+import com.jayway.jsontransformer.Configuration;
+import com.jayway.jsontransformer.JsonPath;
+import com.jayway.jsontransformer.PathNotFoundException;
 import org.hamcrest.Matcher;
 
 import static java.lang.String.format;

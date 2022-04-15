@@ -7,7 +7,7 @@ import com.jayway.jsonassert.impl.matcher.IsCollectionWithSize;
 import com.jayway.jsonassert.impl.matcher.IsEmptyCollection;
 import com.jayway.jsonassert.impl.matcher.IsMapContainingKey;
 import com.jayway.jsonassert.impl.matcher.IsMapContainingValue;
-import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsontransformer.JsonPath;
 import org.hamcrest.Matcher;
 
 import java.io.IOException;
