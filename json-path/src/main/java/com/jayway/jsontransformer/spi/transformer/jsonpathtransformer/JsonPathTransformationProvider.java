@@ -271,7 +271,8 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                 // if the source path does not exist then nothing to do
                 // just return what came in
                 // TODO: log here. we are going to ignore any additionalTransform as well.
-                return transformed;
+                if (! configuration.getOptions().contains(Option.FORCE_MISSING_PROPERTIES_ON_TARGET))
+                    return transformed;
             }
         }
 
@@ -497,6 +498,7 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     private Function<String, Long> toEpochMillis = (a) -> iso8601ToEpochMillis(a);
     private Function<Long, String> toIso8601 = (a) -> epochMillisToIso8601(a);
     private Function<Boolean, String> boolToString = (b) -> b ? "true" : "false";
+    private Function<Number, String> numberToString = (b) -> b.toString();
 
     private static String getInferredType(Number a, Number b) {
         String ab = (a.getClass().getName().substring(10, 11).toUpperCase())
@@ -627,6 +629,8 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                 return toEpochMillis.apply((String) srcValue);
             case BOOL_TO_STRING:
                 return boolToString.apply ((Boolean) srcValue);
+            case NUMBER_TO_STRING:
+                return numberToString.apply ((Number) srcValue);
 
             default:
                 throw new TransformationException(

@@ -11,6 +11,12 @@ Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http
 
 News
 ----
+20 Apr 2022 - Released JsonPath 2.5.2:
+    New Option.FORCE_MISSING_PROPERTIES_ON_TARGET provided to force target json to contain missing source fields
+
+20 Apr 2022 - Released JsonPath 2.5.1:
+    New Transformation (cast) function NUMBER_TO_STRING provided
+
 10 Dec 2020 - Released JsonPath 2.5.0
 
 05 Jul 2017 - Released JsonPath 2.4.0

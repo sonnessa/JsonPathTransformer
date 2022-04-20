@@ -25,6 +25,10 @@
       "target": "$.data.firstname"
     },
     {
+      "source": "$.Missing",
+      "target": "$.data.missing"
+    },
+    {
       "source": "$.Telefono",
       "target": "$.data.phone"
     },
