@@ -628,9 +628,9 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
             case TO_EPOCHMILLIS:
                 return toEpochMillis.apply((String) srcValue);
             case BOOL_TO_STRING:
-                return boolToString.apply ((Boolean) srcValue);
+                return srcValue != null ? boolToString.apply ((Boolean) srcValue) : null;
             case NUMBER_TO_STRING:
-                return numberToString.apply ((Number) srcValue);
+                return srcValue != null ? numberToString.apply ((Number) srcValue) : null;
 
             default:
                 throw new TransformationException(
