@@ -11,7 +11,15 @@ Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http
 
 News
 ----
-20 Apr 2022 - Released JsonPath 2.5.3:
+21 May 2022 - Released JsonPath 2.5.5:
+New Transformations STR_TO_ISO8601, ISO8601_TO_STR to transform strings into ISO8601 dates, using custom date format
+    and vice-versa.
+
+02 May 2022 - Released JsonPath 2.5.4:
+    New Transformations ARRAY_JOIN, STRING_TO_ARRAY to transform array of strings into delimiter concatenated string
+    and vice-versa.
+
+01 May 2022 - Released JsonPath 2.5.3:
     New transformation functions BOOL_TO_STRING and NUMBER_TO_STRING now support null values
 
 20 Apr 2022 - Released JsonPath 2.5.2:

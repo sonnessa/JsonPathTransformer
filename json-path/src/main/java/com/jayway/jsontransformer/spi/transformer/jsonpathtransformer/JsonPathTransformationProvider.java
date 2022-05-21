@@ -9,11 +9,15 @@ import com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.model.Tran
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.JsonPathTransformationSpec.isArrayWildCard;
 import static com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.JsonPathTransformationSpec.isScalar;
@@ -499,6 +503,11 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     private Function<Long, String> toIso8601 = (a) -> epochMillisToIso8601(a);
     private Function<Boolean, String> boolToString = (b) -> b ? "true" : "false";
     private Function<Number, String> numberToString = (b) -> b.toString();
+    private BiFunction<ArrayList<String>, String, String> arrayJoin = (a, s) -> a.stream().collect(Collectors.joining( s ));
+    private BiFunction<String, String, List<String>> stringToArray = (a, s) -> Arrays.stream(a.split(s)).collect(Collectors.toList());
+
+    private BiFunction<String, String, String> iso8601ToStr = (a, b) -> iso8601ToString(a, b);
+    private BiFunction<String, String, String> strToIso8601 = (a, b) -> stringToIso8601(a, b);
 
     private static String getInferredType(Number a, Number b) {
         String ab = (a.getClass().getName().substring(10, 11).toUpperCase())
@@ -595,6 +604,35 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
         return strToDate.toEpochMilli();
     }
 
+    public static String stringToIso8601(String value, String format) {
+        String[] tokens = format.split(",");
+        SimpleDateFormat sdf = new SimpleDateFormat(tokens[0], Locale.getDefault());
+        sdf.setTimeZone(tokens.length == 1 ?
+          TimeZone.getDefault() :
+          TimeZone.getTimeZone(tokens[1]));
+
+        try {
+            Date d = sdf.parse(value);
+            return DateTimeFormatter.ISO_INSTANT.format(d.toInstant());
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    public static String iso8601ToString(String value, String format) {
+        String[] tokens = format.split(",");
+        SimpleDateFormat sdf = new SimpleDateFormat(tokens[0], Locale.getDefault());
+        sdf.setTimeZone(tokens.length == 1 ?
+          TimeZone.getDefault() :
+          TimeZone.getTimeZone(tokens[1]));
+
+        try {
+            Instant strToDate = Instant.parse(value);
+            return sdf.format(strToDate);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
 
     private Object applyAddtionalTransform(
             Object srcValue, Object srcPostProcessingVal, SourceTransform.AllowedOperation op) {
@@ -631,6 +669,14 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                 return srcValue != null ? boolToString.apply ((Boolean) srcValue) : null;
             case NUMBER_TO_STRING:
                 return srcValue != null ? numberToString.apply ((Number) srcValue) : null;
+            case ARRAY_JOIN:
+                return srcValue != null ? arrayJoin.apply ((ArrayList<String>) srcValue, (String) srcPostProcessingVal) : null;
+            case STRING_TO_ARRAY:
+                return srcValue != null ? stringToArray.apply ((String) srcValue, (String) srcPostProcessingVal) : null;
+            case ISO8601_TO_STR:
+                return iso8601ToStr.apply((String) srcValue, (String) srcPostProcessingVal);
+            case STR_TO_ISO8601:
+                return strToIso8601.apply((String) srcValue, (String) srcPostProcessingVal);
 
             default:
                 throw new TransformationException(
