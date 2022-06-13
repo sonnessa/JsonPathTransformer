@@ -364,7 +364,8 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                         getStringFromBundle(INVALID_UNARY_OPERATOR,
                                 srcValue, additonalSourceValue));
             }
-        } else if (operator != null && anyOperandIsNull(srcValue, additonalSourceValue)) {
+        //} else if (operator != null && anyOperandIsNull(srcValue, additonalSourceValue)) {
+        } else if (operator != null && additonalSourceValue == null) {
             //throw invalid Binary operator, one of the operands is null
             throw new TransformationException(
                     getStringFromBundle(INVALID_BINARY_OPERATOR, operator));
@@ -503,8 +504,8 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     private Function<Long, String> toIso8601 = (a) -> epochMillisToIso8601(a);
     private Function<Boolean, String> boolToString = (b) -> b ? "true" : "false";
     private Function<Number, String> numberToString = (b) -> b.toString();
-    private BiFunction<ArrayList<String>, String, String> arrayJoin = (a, s) -> a.stream().collect(Collectors.joining( s ));
-    private BiFunction<String, String, List<String>> stringToArray = (a, s) -> Arrays.stream(a.split(s)).collect(Collectors.toList());
+    private BiFunction<ArrayList<String>, String, String> arrayJoin = (a, s) -> a != null ? a.stream().collect(Collectors.joining( s )) : null;
+    private BiFunction<String, String, List<String>> stringToArray = (a, s) -> a != null ? Arrays.stream(a.split(s)).collect(Collectors.toList()) : null;
 
     private BiFunction<String, String, String> iso8601ToStr = (a, b) -> iso8601ToString(a, b);
     private BiFunction<String, String, String> strToIso8601 = (a, b) -> stringToIso8601(a, b);
@@ -628,7 +629,7 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
 
         try {
             Instant strToDate = Instant.parse(value);
-            return sdf.format(strToDate);
+            return sdf.format(strToDate.toEpochMilli());
         } catch (Exception e) {
             return e.getMessage();
         }

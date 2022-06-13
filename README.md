@@ -11,6 +11,9 @@ Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http
 
 News
 ----
+13 Jun 2022 - Released JsonPath 2.5.6:
+ISO8601_TO_STR bug fix. Bifunction transformation can be applied to null values.
+
 21 May 2022 - Released JsonPath 2.5.5:
 New Transformations STR_TO_ISO8601, ISO8601_TO_STR to transform strings into ISO8601 dates, using custom date format
     and vice-versa.
