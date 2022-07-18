@@ -9,7 +9,9 @@ import org.junit.Test;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 
 public class TransformationArcaTest {
@@ -45,6 +47,50 @@ public class TransformationArcaTest {
         DocumentContext tgtJsonContext = JsonPath.parse(transformed);
         System.out.println("Document Created by Transformation:" + tgtJsonContext.jsonString());
 
+        /*//Assertions about correctness of transformations
+        //$.earliestStartTime +  $.plannedDriveDurationSeconds == $.testingAdditionalTransform.destinationSTAComputed
+        long earliestStartTime = jsonContext.read("$.earliestStartTime");
+        int plannedDriveDurationSeconds = jsonContext.read( "$.plannedDriveDurationSeconds");
+        long destinationSTAComputed = tgtJsonContext.read("$.testingAdditionalTransform.destinationSTAComputed");
+        assertEquals((earliestStartTime + plannedDriveDurationSeconds), destinationSTAComputed);
+
+        //! $.isTPLManaged == $.testingAdditionalTransform.isNotTPLManaged
+        boolean isTPLManaged = jsonContext.read("$.isTPLManaged");
+        boolean isNotTPLManaged = tgtJsonContext.read("$.testingAdditionalTransform.isNotTPLManaged");
+        assertEquals(!isTPLManaged,isNotTPLManaged);
+
+        //$.cost + 100 == $.testingAdditionalTransform.totalCost
+        double cost = jsonContext.read("$.cost");
+        double totalCost = tgtJsonContext.read("$.testingAdditionalTransform.totalCost");
+        assertEquals(cost + 100, totalCost, 0);
+
+        //$.weight / 1000 == $.testingAdditionalTransform.weightKGS
+        double weight = jsonContext.read("$.weight ");
+        double weightKGS = tgtJsonContext.read("$.testingAdditionalTransform.weightKGS");
+        assertEquals(weight/1000, weightKGS, 0.01);
+
+        //1 - $.weightUtilization == $.testingAdditionalTransform.unUtilizedWeight
+        double weightUtilization = jsonContext.read("$.weightUtilization");
+        double unUtilizedWeight = tgtJsonContext.read("$.testingAdditionalTransform.unUtilizedWeight");
+        assertEquals(1-weightUtilization, unUtilizedWeight, 0.01);*/
+    }
+
+    @Test
+    public void custom_transform_spec_test() {
+        Map<String, Function<Object, String>> customTransformations = new HashMap<>();
+        customTransformations.put("CUSTOM_SPLIT", (a) -> {
+            if ("a".equals(a))
+                return "RIGHT";
+            else
+                return "WRONG";
+        });
+
+        Object transformed = configuration.transformationProvider().transform(sourceJson,spec,
+          configuration, customTransformations);
+        DocumentContext tgtJsonContext = JsonPath.parse(transformed);
+        System.out.println("Document Created by Transformation:" + tgtJsonContext.jsonString());
+
+        assertEquals(tgtJsonContext.jsonString().contains("\"custom\":\"RIGHT\""), true);
         /*//Assertions about correctness of transformations
         //$.earliestStartTime +  $.plannedDriveDurationSeconds == $.testingAdditionalTransform.destinationSTAComputed
         long earliestStartTime = jsonContext.read("$.earliestStartTime");

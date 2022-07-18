@@ -92,6 +92,13 @@
         },
         "target": "$.data.is_cliente",
         "lookupTable": "booleanMapper"
-      }
+      },
+    {
+      "source": "$.Custom",
+      "additionalTransform" : {
+        "operator" : "CUSTOM_SPLIT"
+      },
+      "target": "$.data.custom"
+    }
     ]
 }

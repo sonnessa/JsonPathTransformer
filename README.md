@@ -11,6 +11,12 @@ Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http
 
 News
 ----
+18 Jul 2022 - Released JsonPath 2.6.0:
+CUSTOM_ functions introduced in additionalTransform: function can be defined at host passing a map of custom function
+
+20 Jun 2022 - Released JsonPath 2.5.9:
+New transformation function did not support null values.
+
 14 Jun 2022 - Released JsonPath 2.5.8:
 Fix behavior introduced in 2.5.7
 

@@ -57,7 +57,7 @@ public class SourceTransform {
         AND(BOOLEAN), OR(BOOLEAN), NOT(UNARY_BOOLEAN), XOR(BOOLEAN), TO_EPOCHMILLIS(UNARY_TIME),
         TO_ISO8601(UNARY_TIME), BOOL_TO_STRING(UNARY_BOOLEAN), NUMBER_TO_STRING(UNARY_TIME),
         ARRAY_JOIN(STRING), STRING_TO_ARRAY(STRING),
-        STR_TO_ISO8601(STRING), ISO8601_TO_STR(STRING), ;
+        STR_TO_ISO8601(STRING), ISO8601_TO_STR(STRING);
 
         private static Set<String> allowedOperations;
         private String type;

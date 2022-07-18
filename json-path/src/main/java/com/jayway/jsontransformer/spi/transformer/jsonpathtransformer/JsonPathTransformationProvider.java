@@ -121,6 +121,12 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
 
     @Override
     public Object transform(Object source, JsonPathTransformationSpec spec, Configuration configuration) {
+        return transform(source, spec, configuration, null);
+    }
+
+    @Override
+    public Object transform(Object source, JsonPathTransformationSpec spec, Configuration configuration,
+                            Map<String, Function<Object, String>> customTransformations) {
 
         configuration.addOptions(Option.CREATE_MISSING_PROPERTIES_ON_DEFINITE_PATH);
 
@@ -169,13 +175,13 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                         if (first) {
                             transformed = transform(
                                     exp, first, inputObject, configuration, jsonContext, transformed, model
-                                    , pm.getLookupTable());
+                                    , pm.getLookupTable(), customTransformations);
                             //if the very first path is not found in the source.
                             first = (transformed != null) ? false : true;
                         } else {
                             transformed = transform(
                                     exp, first, inputObject, configuration, jsonContext, transformed, model
-                                    , pm.getLookupTable());
+                                    , pm.getLookupTable(), customTransformations);
                         }
 
                     }
@@ -187,13 +193,13 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
             if (first) {
                 transformed = transform(
                         pm, first, inputObject, configuration, jsonContext, transformed, model
-                        , pm.getLookupTable());
+                        , pm.getLookupTable(), customTransformations);
                 //if the very first path is not found in the source.
                 first = (transformed != null) ? false : true;
             } else {
                 transformed = transform(
                         pm, first, inputObject, configuration, jsonContext, transformed, model
-                        , pm.getLookupTable());
+                        , pm.getLookupTable(), customTransformations);
             }
         }
 
@@ -203,7 +209,7 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     private Object transform(PathMapping pm,
                              boolean first, String inputObject,
                              Configuration configuration, DocumentContext jsonContext, Object transformed,
-                             TransformationModel model, String lookupTable) {
+                             TransformationModel model, String lookupTable, Map<String, Function<Object, String>> customTransformations) {
 
 
         String srcPath = pm.getSource();
@@ -317,8 +323,13 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
 
             }
         }
-        SourceTransform.AllowedOperation operatorEnum = (operator != null) ?
-                SourceTransform.AllowedOperation.valueOf(operator) : null;
+        SourceTransform.AllowedOperation operatorEnum = null;
+        try {
+            operatorEnum = (operator != null) ?
+              SourceTransform.AllowedOperation.valueOf(operator) : null;
+        } catch (IllegalArgumentException e) {
+
+        }
 
 
         if (additonalSourceValue != null ||
@@ -330,6 +341,11 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
             if (operator != null) {
                 srcValue = applyAddtionalTransform(srcValue, additonalSourceValue, operatorEnum);
             }
+        }
+
+        if (customTransformations != null && customTransformations.get(operator) != null) {
+            Function<Object, String> f = customTransformations.get(operator);
+            srcValue = f.apply(srcValue);
         }
 
         if (lookupTable != null && (srcValue instanceof String)) {
@@ -600,12 +616,18 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     }
 
     public static long iso8601ToEpochMillis(String time) {
+        if (time == null || time.trim().length() == 0)
+            return 0L;
+
         //parsing date from ISO 8601
         Instant strToDate = Instant.parse(time);
         return strToDate.toEpochMilli();
     }
 
     public static String stringToIso8601(String value, String format) {
+        if (value == null || value.trim().length() == 0)
+            return null;
+
         String[] tokens = format.split(",");
         SimpleDateFormat sdf = new SimpleDateFormat(tokens[0], Locale.getDefault());
         sdf.setTimeZone(tokens.length == 1 ?
@@ -621,6 +643,9 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     }
 
     public static String iso8601ToString(String value, String format) {
+        if (value == null || value.trim().length() == 0)
+            return null;
+
         String[] tokens = format.split(",");
         SimpleDateFormat sdf = new SimpleDateFormat(tokens[0], Locale.getDefault());
         sdf.setTimeZone(tokens.length == 1 ?

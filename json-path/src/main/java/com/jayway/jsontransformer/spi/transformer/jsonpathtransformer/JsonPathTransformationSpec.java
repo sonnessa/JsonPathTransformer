@@ -234,7 +234,7 @@ public class JsonPathTransformationSpec implements TransformationSpec {
             }
 
             SourceTransform.AllowedOperation operatorEnum = null;
-            if (operator != null) {
+            if (operator != null && !operator.startsWith("CUSTOM")) {
                 try {
                     operatorEnum = SourceTransform.AllowedOperation.valueOf(operator);
                 } catch (IllegalArgumentException ex) {
@@ -257,7 +257,7 @@ public class JsonPathTransformationSpec implements TransformationSpec {
                         INVALID_OPERATOR_WITH_SRC_NULL, operator));
 
             }
-            if (src != null && operator != null) {
+            if (src != null && operator != null && !operator.startsWith("CUSTOM")) {
                 if (operatorEnum.getType().startsWith(UNARY)) {
                     if (additionalSrc != null
                             || constantSrcValue != null) {
@@ -266,7 +266,7 @@ public class JsonPathTransformationSpec implements TransformationSpec {
                                 INVALID_UNARY_OPERATOR, src, additionalSrc));
                     }
                 }
-            } else if (src != null && operator == null) {
+            } else if (src != null && operator == null && !operator.startsWith("CUSTOM")) {
                 if (additionalSrc != null
                         || constantSrcValue != null) {
                     //missing operator
@@ -288,7 +288,7 @@ public class JsonPathTransformationSpec implements TransformationSpec {
                         constantSrcValue,additionalSrc));
 
             } else if (additionalSrc == null &&
-                    constantSrcValue == null && operator != null &&
+                    constantSrcValue == null && operator != null  && !operator.startsWith("CUSTOM") &&
                     !operatorEnum.getType().startsWith(UNARY)) {
                 //throw invalid additional transform, one of sourcePath or constantSource should be non-null
                 response.add(new JsonPathTransformerValidationError(

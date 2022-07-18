@@ -28,5 +28,6 @@
   "Note": "note",
   "CambioMedico": "string",
   "Id_Cliente_Web": "string",
-  "Cliente": true
+  "Cliente": true,
+  "Custom": "a"
 }
