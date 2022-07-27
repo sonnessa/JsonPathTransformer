@@ -8,6 +8,8 @@ import com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.model.*;
 
 import static com.jayway.jsontransformer.spi.transformer.jsonpathtransformer.model.JsonPathTransformerValidationError.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -343,7 +345,9 @@ public class JsonPathTransformationSpec implements TransformationSpec {
 
     private static final Set<Class> WRAPPER_TYPES = new HashSet<Class>(
             Arrays.asList(Integer.class, Boolean.class, Float.class, Double.class, String.class,
-                    Character.class, Byte.class, Short.class, Long.class));
+                    Character.class, Byte.class, Short.class, Long.class,
+              BigDecimal.class, BigInteger.class
+            ));
 
     /*package*/
     static boolean isScalar(Object srcValue) {
