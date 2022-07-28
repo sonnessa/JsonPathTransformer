@@ -11,6 +11,12 @@ Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http
 
 News
 ----
+28 Jul 2022 - Released JsonPath 2.7.0:
+Transform target strategies refactoring:
+     CREATE_MISSING_PROPERTIES_ON_DEFINITE_PATH,
+     FORCE_MISSING_PROPERTIES_ON_TARGET,
+     SRC_NULL_ON_TARGET
+
 27 Jul 2022 - Released JsonPath 2.6.1:
 Float values are parsed as BigDecimal but it was not considered a scalar value to for json trasformation.
 BigDecimal and BigInteger value representation of json documents are now treated as scalar.

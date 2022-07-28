@@ -273,9 +273,11 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
         if (!srcValueIsConstant && srcPath != null) {
             try {
                 srcValue = jsonContext.read(compiledSrcPath);
-                if (srcValue == null && ! configuration.getOptions().contains(Option.FORCE_MISSING_PROPERTIES_ON_TARGET)) {
-                    // TODO: log here. we are going to ignore any additionalTransform as well.
-                    return transformed;
+                if (!configuration.getOptions().contains(Option.SRC_NULL_ON_TARGET)) {
+                    if (srcValue == null && ! configuration.getOptions().contains(Option.FORCE_MISSING_PROPERTIES_ON_TARGET)) {
+                        // TODO: log here. we are going to ignore any additionalTransform as well.
+                        return transformed;
+                    }
                 }
             } catch (PathNotFoundException ex) {
                 // if the source path does not exist then nothing to do
