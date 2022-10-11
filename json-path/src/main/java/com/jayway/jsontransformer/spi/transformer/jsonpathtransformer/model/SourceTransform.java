@@ -44,6 +44,7 @@ public class SourceTransform {
     public static final String BOOLEAN = "boolean";
     public static final String UNARY_BOOLEAN = "unary_boolean";
     public static final String UNARY_NUMERIC = "unary_numeric";
+    public static final String UNARY_STRING = "unary_string";
     public static final String UNARY_TIME ="unary_time";
     public static final String UNARY_PREFIX = "unary";
 
@@ -56,6 +57,7 @@ public class SourceTransform {
         RHS_SUB(NUMERIC), MUL(NUMERIC), LHS_DIV(NUMERIC), RHS_DIV(NUMERIC),
         AND(BOOLEAN), OR(BOOLEAN), NOT(UNARY_BOOLEAN), XOR(BOOLEAN), TO_EPOCHMILLIS(UNARY_TIME),
         TO_ISO8601(UNARY_TIME), BOOL_TO_STRING(UNARY_BOOLEAN), NUMBER_TO_STRING(UNARY_TIME),
+        STRING_TO_DOUBLE(UNARY_STRING), STRING_TO_LONG(UNARY_STRING), STRING_TO_BOOL(UNARY_STRING),
         ARRAY_JOIN(STRING), STRING_TO_ARRAY(STRING),
         STR_TO_ISO8601(STRING), ISO8601_TO_STR(STRING);
 

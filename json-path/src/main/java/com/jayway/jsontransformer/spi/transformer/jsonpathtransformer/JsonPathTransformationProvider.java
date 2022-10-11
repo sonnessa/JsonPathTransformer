@@ -401,7 +401,8 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                             operator.name(), "numeric", operator.getType()));
         } else if (srcValue instanceof String && !(
                 SourceTransform.STRING.equals(operator.getType())
-                        || SourceTransform.UNARY_TIME.equals(operator.getType()))) {
+                        || SourceTransform.UNARY_TIME.equals(operator.getType())
+                        || SourceTransform.UNARY_STRING.equals(operator.getType()))) {
 
             //throw expected String operator but found
             throw new TransformationException(
@@ -528,6 +529,11 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
     private BiFunction<String, String, String> iso8601ToStr = (a, b) -> iso8601ToString(a, b);
     private BiFunction<String, String, String> strToIso8601 = (a, b) -> stringToIso8601(a, b);
 
+    private Function<String, Long> strToLong = (b) -> (long) Double.parseDouble(b);
+    private Function<String, Double> strToDouble = (b) -> Double.parseDouble(b);
+    private Function<String, Boolean> strToBool = (b) -> Boolean.parseBoolean(b);
+
+
     private static String getInferredType(Number a, Number b) {
         String ab = (a.getClass().getName().substring(10, 11).toUpperCase())
                 + (b.getClass().getName().substring(10, 11).toUpperCase());
@@ -644,6 +650,24 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
         }
     }
 
+    public static String stringToDouble(String value, String format) {
+        if (value == null || value.trim().length() == 0)
+            return null;
+
+        String[] tokens = format.split(",");
+        SimpleDateFormat sdf = new SimpleDateFormat(tokens[0], Locale.getDefault());
+        sdf.setTimeZone(tokens.length == 1 ?
+          TimeZone.getDefault() :
+          TimeZone.getTimeZone(tokens[1]));
+
+        try {
+            Date d = sdf.parse(value);
+            return DateTimeFormatter.ISO_INSTANT.format(d.toInstant());
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
     public static String iso8601ToString(String value, String format) {
         if (value == null || value.trim().length() == 0)
             return null;
@@ -705,6 +729,12 @@ public class JsonPathTransformationProvider implements TransformationProvider<Js
                 return iso8601ToStr.apply((String) srcValue, (String) srcPostProcessingVal);
             case STR_TO_ISO8601:
                 return strToIso8601.apply((String) srcValue, (String) srcPostProcessingVal);
+            case STRING_TO_LONG:
+                return srcValue != null ? strToLong.apply ((String) srcValue) : null;
+            case STRING_TO_DOUBLE:
+                return srcValue != null ? strToDouble.apply ((String) srcValue) : null;
+            case STRING_TO_BOOL:
+                return srcValue != null ? strToBool.apply ((String) srcValue) : null;
 
             default:
                 throw new TransformationException(

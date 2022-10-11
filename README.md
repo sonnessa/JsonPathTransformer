@@ -11,6 +11,9 @@ Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http
 
 News
 ----
+11 Oct 2022 - Released JsonPath 2.7.1:
+      New Transformations STRING_TO_LONG, STRING_TO_DOUBLE, STRING_TO_BOOL
+
 28 Jul 2022 - Released JsonPath 2.7.0:
 Transform target strategies refactoring:
      CREATE_MISSING_PROPERTIES_ON_DEFINITE_PATH,
